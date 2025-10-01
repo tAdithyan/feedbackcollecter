@@ -8,6 +8,7 @@ function Home() {
   const [hoveredRating, setHoveredRating] = useState(0)
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const getUserFromStorage = () => {
     try {
@@ -103,29 +104,29 @@ function Home() {
       <nav className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2">
-               
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Feedback Collector
                 </span>
               </Link>
             </div>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               {user ? (
                 <>
                   <Link
                     to="/adminlogin"
-                    className="px-4 py-2   border rounded-lg cursor-pointer transition-colors duration-300 font-medium"
+                    className="px-4 py-2 border rounded-lg cursor-pointer transition-colors duration-300 font-medium"
                   >
                     Admin Dashboard
                   </Link>
                   <div className="flex items-center space-x-3">
-                   
                     <button
                       onClick={handleSignOut}
-                      className="px-4 py-2   rounded-lg cursor-pointer transition-colors duration-300 font-medium"
+                      className="px-4 py-2 rounded-lg cursor-pointer transition-colors duration-300 font-medium"
                     >
                       Sign Out
                     </button>
@@ -148,28 +149,104 @@ function Home() {
                 </>
               )}
             </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                {/* Hamburger icon */}
+                <svg
+                  className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                {/* Close icon */}
+                <svg
+                  className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation Menu */}
+          <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`}>
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/90 backdrop-blur-lg rounded-lg mt-2 mb-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/adminlogin"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleSignOut()
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-300"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/signin"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="block px-3 py-2 rounded-md text-base font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
 
       <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="text-center">
-        <span className="text-gray-700">
-                      Welcome, <span className="font-semibold text-blue-600">{user.username}</span>
-                    </span>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-          Feedback Collector
-        </h1>
-        <p className="text-gray-600 mb-8 text-lg">
-          Share your experience with us
-        </p>
-        
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-lg"
-        >
-          Give Feedback
-        </button>
+          <span className="text-gray-700">
+            Welcome, <span className="font-semibold text-blue-600">{user.username}</span>
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Feedback Collector
+          </h1>
+          <p className="text-gray-600 mb-8 text-base sm:text-lg">
+            Share your experience with us
+          </p>
+          
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-base sm:text-lg"
+          >
+            Give Feedback
+          </button>
         </div>
       </div>
 
